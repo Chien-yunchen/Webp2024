@@ -1,0 +1,177 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>B1129048簡筠真</title>
+</head>
+<style> 
+    table { 
+      font-family: Arial, Helvetica, sans-serif; 
+      border-collapse: collapse; 
+      width: 100%; 
+    } 
+    td, th { 
+      border: 1px solid #ddd; 
+      padding: 6px; 
+    } 
+    tr:nth-child(even){background-color: #f2f2f2;} 
+    tr:hover {background-color: #ddd;} 
+    th { 
+      padding-top: 12px; 
+      padding-bottom: 12px; 
+      text-align: left; 
+      background-color: #04AA6D; 
+      color: white; 
+    } 
+    </style>
+<script>
+    var dataset ={
+        "version": "1.4",
+        "UID": "5b3dd544aaa378d7ca9a2e9a",
+        "title": "科博館《古代人說故事》南屯山仔腳遺址出土的鐵刀首亮相!",
+        "category": "6",
+        "showInfo": [
+            {
+            "time": "2023/04/04 09:00:00",
+            "location": "臺中市40453 臺中市北區館前路一號",
+            "locationName": "人類文化廳二樓",
+            "onSales": "Y",
+            "price": "全票100元，半票70元。",
+            "latitude": "24.157234",
+            "longitude": "120.66606",
+            "endTime": "2028/12/31 17:00:00"
+            }
+        ],
+        "showUnit": "國立自然科學博物館",
+        "discountInfo": "",
+        "descriptionFilterHtml": "    想要了解東海岸舊石器時代八仙洞，新石器時代的卑南、麒麟文化及中部大坌坑、牛罵頭、大馬璘、營埔及番仔園文化嗎?科博館更新常設展區，推出《古代人說故事》，展覽內容生動活潑，並以動畫影像剪輯及多媒體互動方式呈現，除了認識歷史課本寫的考古學是什麼外，更能讓您親身體驗臺灣古代人的生活方式!\r\n\r\n    目前中部地區是臺灣考古學研究的重心之一，近二十年來考古工作者在各地獲得豐碩的挖掘成果，因此科博館決定依據最新考古發掘資料，更新該常設展區，除了展示臺中安和遺址發現栽種的稻米、母與子、戴鯊魚牙玉飾的青年及南屯山仔腳出土完整的鐵刀， 此外還有⺠間蒐藏家蔡坤玉先生提供一件澎湖海溝帶人工鋸痕的鹿角，結合張鈞翔博士澎湖原人的研究，證明19至45萬年前就有獵人到臺灣。歡迎⺠眾踴躍參觀!",
+        "imageUrl": "",
+        "masterUnit": [
+            "國立自然科學博物館"
+        ],
+        "subUnit": [],
+        "supportUnit": [],
+        "otherUnit": [],
+        "webSales": "http://www.nmns.edu.tw/ch/visit/price.htm",
+        "sourceWebPromote": "",
+        "comment": "",
+        "editModifyDate": "2018/07/06 14:25:35",
+        "sourceWebName": "營運科",
+        "startDate": "2023/04/04",
+        "endDate": "2028/12/31",
+        "hitRate": 2010
+    }
+
+    var start = 0;
+    var openUrl =
+        "https://cloud.culture.tw/frontsite/trans/SearchShowAction.do?method=doFindTypeJ&category=6";
+    var xhr = new XMLHttpRequest ();
+    xhr.open ('GET', openUrl, true);
+    xhr.send ();
+    xhr.onreadystatechange = function(){
+        if(this.readyState == 4 && this. status == 200){
+            dataset = JSON. parse(this.responseText);
+            addNewData(dataset,0);
+        }
+    };
+
+    function addNewData (dataset,start) {
+        if(dataset.length == 0){
+            var myTable = document.getElementById("csie");
+            var rowCount = myTable.rows.length;
+            for (var i = rowCount - 1; i > 0; i--) {
+                myTable.deleteRow(i);
+            }
+            var end = Math.min(start + 10, dataset.length);
+            for (var i = start; i < end; i++) {
+                var data = dataset[i];
+                var row = myTable.insertRow(-1);
+                row.insertCell(0).innerHTML = data['title'];
+                row.insertCell(1).innerHTML = data['showInfo'][0]['location'];
+                row.insertCell(2).innerHTML = data['showInfo'][0]['price'];
+            }
+            document.getElementById("nowInfo").innerHTML =0;
+            document.getElementById("pageInfo").innerHTML = 0;
+        }else{
+            var myTable = document.getElementById("csie");
+            var rowCount = myTable.rows.length;
+            for (var i = rowCount - 1; i > 0; i--) {
+                myTable.deleteRow(i);
+            }
+            var end = Math.min(start + 10, dataset.length);
+            for (var i = start; i < end; i++) {
+                var data = dataset[i];
+                var row = myTable.insertRow(-1);
+                row.insertCell(0).innerHTML = data['title'];
+                row.insertCell(1).innerHTML = data['showInfo'][0]['location'];
+                row.insertCell(2).innerHTML = data['showInfo'][0]['price'];
+            }
+            var now = Math.floor(start/10) + 1;
+            document.getElementById("nowInfo").innerHTML = now;
+            var total = Math.ceil(dataset.length/10);
+            document.getElementById("pageInfo").innerHTML = total;
+        }
+        
+    };
+    function next_page(){
+        start += 10;
+        var input = document.getElementById("searchInput").value.toUpperCase();
+        var filteredData = dataset.filter(function(item) {
+            return item.title.toUpperCase().includes(input);
+        });
+        if(start <= filteredData.length){
+            addNewData(filteredData, start);
+        }else{
+            start -= 10;
+            addNewData(filteredData, start);
+        }
+        
+    }
+
+    
+    function last_page(){
+        start -= 10;
+        var input = document.getElementById("searchInput").value.toUpperCase();
+        var filteredData = dataset.filter(function(item) {
+            return item.title.toUpperCase().includes(input);
+        });
+        if(start >=0){
+            addNewData(filteredData, start);
+        }else{
+            start += 10;
+            addNewData(filteredData, start);
+        }
+    }
+
+    function search() {
+        var input = document.getElementById("searchInput").value.toUpperCase();
+        var filteredData = dataset.filter(function(item) {
+            return item.title.toUpperCase().includes(input);
+        });
+        start = 0;
+        addNewData(filteredData, 0);
+    }
+</script>
+<body>
+    <h1>景點觀光展覽資訊
+        <input type = "text" id = "searchInput" onchange = "search()">
+    </h1>
+    
+    <table id ="csie" class ="table table-striped table-hover">
+        <tr>
+            <th>名稱</th>
+            <th>地標</th>
+            <th>票價</th>
+        </tr>
+    </table>
+    <div style="display: flex; align-items: center;">
+        <button onclick="last_page()">上一頁</button>
+        <h6 id = "nowInfo"></h6>
+        <h6>/</h6>
+        <h6 id ="pageInfo"></h6>
+        <button onclick="next_page()">下一頁</button>
+    </div>
+    
+</body>
+</html>
